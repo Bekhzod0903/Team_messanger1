@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Send Message to {{ group.name }}</title>
+</head>
+<body>
+    <h1>Send a Message to {{ group.name }}</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ message_form.as_p }}
+        <button type="submit">Send</button>
+    </form>
+    <a href="{% url 'group' group.pk %}">Back to Group</a>
+</body>
+</html>
