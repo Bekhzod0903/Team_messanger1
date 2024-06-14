@@ -5,20 +5,25 @@
     <title>{{ group.name }}</title>
 </head>
 <body>
-   
-
+    <h1>{{ group.name }}</h1>
     <h2>Messages</h2>
     <ul>
         {% for message in messages %}
-            <li>{{ message.user.username }}: {{ message.text }} </li>
-            
+            <li>{{ message.user.username }}: {{ message.text }}</li>
         {% endfor %}
     </ul>
+
     <h1>Send a Message to {{ group.name }}</h1>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ message_form.as_p }}
         <button type="submit">Send</button>
     </form>
+
+    <nav>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+        </ul>
+    </nav>
 </body>
 </html>

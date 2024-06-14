@@ -86,3 +86,6 @@ class ProfileUpdateView(View):
             }
             messages.error(request,'Something went wrong')
             return render(request, 'profile_update.html', context=context)
+
+
+

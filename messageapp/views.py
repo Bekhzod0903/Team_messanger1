@@ -3,6 +3,8 @@ from django.views import View
 from .models import Group, Message
 from django.http import JsonResponse
 from .forms import GroupForm, MessageForm
+from django.shortcuts import render, get_object_or_404
+
 # Create your views here.
 
 
@@ -33,7 +35,14 @@ class GroupView(View):
 
             return render(request,'group.html', context=context)
   
-    
+
+
+def get_home_page(request):
+    return render(request, 'home.html')
+
+
+
+
 # class SendMessageView(View):
 #     def get(self, request, pk):
 #         group = Group.objects.get(id=pk)
