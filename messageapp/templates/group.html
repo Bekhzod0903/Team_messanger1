@@ -3,27 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ group.name }}</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #3a3a3a;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        h1 {
+            background-color: #6aa84f;
+            color: white;
+            padding: 15px;
+            margin: 0;
+        }
+
+        h2 {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .content {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        ul li {
+            background: #f9f9f9;
+            margin: 10px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        ul li span.username {
+            font-weight: bold;
+            color: #3a3a3a;
+        }
+
+        ul li span.message {
+            margin-left: 10px;
+        }
+
+        form {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        form input, form textarea, form button {
+            width: calc(100% - 40px);
+            max-width: 860px;
+            margin: 10px auto;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: block;
+        }
+
+        form button {
+            background-color: #6aa84f;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #4c7a3f;
+        }
+
+        nav {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            display: inline-block;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 10px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #6aa84f;
+            font-weight: bold;
+        }
+
+        nav ul li a:hover {
+            color: #3a3a3a;
+        }
+    </style>
 </head>
 <body>
-    <h1>{{ group.name }}</h1>
-    <h2>Messages</h2>
-    <ul>
-        {% for message in messages %}
-            <li>{{ message.user.username }}: {{ message.text }}</li>
-        {% endfor %}
-    </ul>
-
-    <h1>Send a Message to {{ group.name }}</h1>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ message_form.as_p }}
-        <button type="submit">Send</button>
-    </form>
-
-    <nav>
+    <header>
+        <h1>{{ group.name }}</h1>
+    </header>
+    <div class="content">
+        <h2>Messages</h2>
         <ul>
-            <li><a href="{% url 'home' %}">Home</a></li>
+            {% for message in messages %}
+                <li>
+                    <span class="username">{{ message.user.username }}</span>:
+                    <span class="message">{{ message.text }}</span>
+                </li>
+            {% endfor %}
         </ul>
-    </nav>
+
+        <h2>Send a Message to {{ group.name }}</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ message_form.as_p }}
+            <button type="submit">Send</button>
+        </form>
+
+        <nav>
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+            </ul>
+        </nav>
+    </div>
 </body>
 </html>
