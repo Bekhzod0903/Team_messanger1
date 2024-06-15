@@ -10,7 +10,7 @@ from .forms import SearchForm
 
 
 def home(request):
-    groups = Group.objects.all()  # Fetch all groups to display
+    groups = Group.objects.all()
     return render(request, 'home.html', {'groups': groups})
 
 
@@ -38,8 +38,6 @@ class GroupView(View):
   
 
 
-def get_home_page(request):
-    return render(request, 'home.html')
 
 
 def home(request):
@@ -48,7 +46,7 @@ def home(request):
 
     if search_form.is_valid():
         query = search_form.cleaned_data['query']
-        groups = groups.filter(name__icontains=query)  # Adjust this filter according to your model fields
+        groups = groups.filter(name__icontains=query)
 
     return render(request, 'base.html', {'groups': groups, 'search_form': search_form})
 
