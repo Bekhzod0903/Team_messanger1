@@ -51,11 +51,39 @@
         ul li a:hover {
             color: #333;
         }
+
+        form {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
     <h1>Welcome to the Home Page, {{ user.username }}</h1>
     <h2>Groups</h2>
+    <form method="GET" action=".">
+        {{ search_form.query.label_tag }}
+        {{ search_form.query }}
+        <input type="submit" value="Search">
+    </form>
     <ul>
         {% for group in groups %}
             <li><a href="{% url 'group' group.pk %}">{{ group.name }}</a></li>

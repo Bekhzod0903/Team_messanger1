@@ -4,6 +4,7 @@ from .models import Group, Message
 from django.http import JsonResponse
 from .forms import GroupForm, MessageForm
 from django.shortcuts import render, get_object_or_404
+from .forms import SearchForm
 
 # Create your views here.
 
@@ -40,6 +41,16 @@ class GroupView(View):
 def get_home_page(request):
     return render(request, 'home.html')
 
+
+def home(request):
+    search_form = SearchForm(request.GET or None)
+    groups = Group.objects.all()
+
+    if search_form.is_valid():
+        query = search_form.cleaned_data['query']
+        groups = groups.filter(name__icontains=query)  # Adjust this filter according to your model fields
+
+    return render(request, 'home.html', {'groups': groups, 'search_form': search_form})
 
 
 

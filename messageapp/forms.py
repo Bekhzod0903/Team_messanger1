@@ -12,3 +12,5 @@ class MessageForm(ModelForm):
         model = Message
         fields = ['text', 'image', 'audio', 'video']
 
+class SearchForm(forms.Form):
+    query = forms.CharField(label='Search', max_length=100)
