@@ -50,7 +50,7 @@ def home(request):
         query = search_form.cleaned_data['query']
         groups = groups.filter(name__icontains=query)  # Adjust this filter according to your model fields
 
-    return render(request, 'home.html', {'groups': groups, 'search_form': search_form})
+    return render(request, 'base.html', {'groups': groups, 'search_form': search_form})
 
 
 

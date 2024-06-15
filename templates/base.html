@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Message app {% endblock %}</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            list-style: none;
+            text-decoration: none;
+        }
+
+        .home-h{
+            color: #333;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        
+        
+
+    </header>
+
+    <main>
+        {% block content %}
+            <nav>
+                <ul>
+                    <li>
+                        <form method="GET" action=".">
+                            {{ search_form.query.label_tag }}
+                            {{ search_form.query }}
+                            <input type="submit" value="Search">
+                        </form>
+                    </li>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                </ul>
+            </nav>
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>Copyright &copy; 2024</p>
+    </footer>
+</body>
+</html>

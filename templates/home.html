@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        h1 {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        ul li {
+            background: #fff;
+            margin: 10px auto;
+            padding: 15px;
+            border: 1px solid #ddd;
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        ul li a {
+            text-decoration: none;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        ul li a:hover {
+            color: #333;
+        }
+
+        form {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="home-h">Welcome to the Home Page, {{ user.username }}</h1>
+    <h2 class="home-h">Groups</h2>
+    <form method="GET" action=".">
+        {{ search_form.query.label_tag }}
+        {{ search_form.query }}
+        <input type="submit" value="Search">
+    </form>
+    <ul>
+        {% for group in groups %}
+            <li><a href="{% url 'group' group.pk %}">{{ group.name }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
