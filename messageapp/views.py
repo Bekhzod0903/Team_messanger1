@@ -40,15 +40,14 @@ class GroupView(View):
 
 
 
-def home(request):
+def home_o(request):
     search_form = SearchForm(request.GET or None)
-    groups = Group.objects.all()
 
     if search_form.is_valid():
         query = search_form.cleaned_data['query']
         groups = groups.filter(name__icontains=query)
 
-    return render(request, 'base.html', {'groups': groups, 'search_form': search_form})
+    return render(request, 'base.html', {'search_form': search_form})
 
 
 

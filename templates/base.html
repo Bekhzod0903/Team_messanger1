@@ -13,8 +13,63 @@
             text-decoration: none;
         }
 
+        .auth-buttons{
+            background:none;
+            padding: 10px;
+            border-radius: 10px;
+            color: rgb(0, 0, 0);
+            font-size: 20px;
+            font-weight: 600;
+            text-decoration: none;
+            text-align: center;
+            width: 150px;
+            height: 50px;
+            margin: 10px;
+        }
+        .auth-buttons:hover{
+            background-color: rgb(0, 0, 0);
+            color: rgb(255, 255, 255);
+            border: none;
+            cursor: pointer;
+        }
+
         .home-h{
             color: #333;
+        }
+
+        .profile-container {
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+        .profile-info {
+            margin: 10px 0;
+        }
+        .edit-button, .orders-button {
+            display: inline-block;
+            padding: 10px 20px;
+            color: white;
+            background-color: #8A2BE2;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            margin: 10px 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .edit-button:hover, .orders-button:hover {
+            background-color: #4a148c;
         }
         /* body {
             font-family: Arial, sans-serif;
@@ -90,13 +145,6 @@
 </head>
 <body>
     <header>
-        
-        
-
-    </header>
-
-    <main>
-        {% block content %}
             <nav>
                 <ul>
                     <li>
@@ -109,6 +157,22 @@
                     <li><a href="{% url 'home' %}">Home</a></li>
                 </ul>
             </nav>
+            <div>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'users:profile' %}"><button class="auth-buttons">Profile</button></a>
+                    <a href="{% url 'users:logout' %}"><button class="auth-buttons">Logout</button></a>
+                {% else %}
+                    <a href="{% url 'users:register' %}"><button class="auth-buttons">Register</a></button>
+                    <a href="{% url 'users:login' %}"><button class="auth-buttons">Login</button></a>
+                {% endif %}            
+            </div>
+        
+
+    </header>
+
+    <main>
+        {% block content %}
+
         {% endblock %}
     </main>
 
