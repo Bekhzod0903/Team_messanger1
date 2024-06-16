@@ -128,6 +128,11 @@
                 <li>
                     <span class="username">{{ message.user.username }}</span>:
                     <span class="message">{{ message.text }}</span>
+                    {% if message.attachment %}
+                    <span class="message"> <a href="{{ message.attachment.url }}">Download</a></span>
+                    {% endif %}
+                        
+                    </span>
                 </li>
             {% endfor %}
         </ul>
