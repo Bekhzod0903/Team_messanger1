@@ -21,75 +21,69 @@
 
         header {
             background-color: #4CAF50;
-            padding: 20px;
-            text-align: center;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             color: white;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
         }
 
         nav ul {
             display: flex;
-            justify-content: center;
-            padding: 10px;
-            background-color: #333;
+            align-items: center;
         }
 
         nav ul li {
             margin: 0 15px;
         }
 
-        nav ul li form, nav ul li a {
-            display: inline-block;
-        }
-
-        nav ul li form input[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-
-        nav ul li form input[type="submit"]:hover {
-            background-color: #45a049;
-        }
-
-        nav ul li a {
+        nav ul li a, .auth-buttons, .search-form input[type="submit"] {
             color: white;
             font-size: 18px;
             font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+            border: 2px solid transparent;
         }
 
-        nav ul li a:hover {
+        nav ul li a:hover, .auth-buttons:hover, .search-form input[type="submit"]:hover {
             color: #4CAF50;
+            background-color: white;
+        }
+
+        .auth-buttons-container {
+            display: flex;
+            align-items: center;
         }
 
         .auth-buttons {
-            background: none;
-            padding: 10px;
-            border-radius: 10px;
-            color: rgb(0, 0, 0);
-            font-size: 20px;
-            font-weight: 600;
-            text-decoration: none;
-            text-align: center;
-            width: 150px;
-            height: 50px;
-            margin: 10px;
-            border: 2px solid #4CAF50;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .auth-buttons:hover {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
+            background: #4CAF50;
+            margin-left: 10px;
             cursor: pointer;
         }
 
-        .home-h {
-            color: #333;
+        .search-form {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-form input[type="text"] {
+            padding: 5px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 5px;
+        }
+
+        .search-form input[type="submit"] {
+            background: #4CAF50;
+            cursor: pointer;
         }
 
         .profile-container {
@@ -102,7 +96,7 @@
             background-color: #f9f9f9;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-    
+
         .profile-image {
             width: 150px;
             height: 150px;
@@ -113,16 +107,16 @@
             transition: transform 0.3s ease-in-out;
             cursor: pointer;
         }
-    
+
         .profile-info {
             margin: 10px 0;
             font-size: 18px;
         }
-    
+
         .profile-info a {
             color: #4CAF50;
         }
-    
+
         .modal {
             display: none;
             position: fixed;
@@ -134,14 +128,14 @@
             background-color: rgba(0,0,0,0.9);
             overflow: auto;
         }
-    
+
         .modal-content {
             margin: auto;
             display: block;
             width: 80%;
             max-width: 700px;
         }
-    
+
         .close {
             position: absolute;
             top: 15px;
@@ -152,19 +146,19 @@
             transition: 0.3s;
             cursor: pointer;
         }
-    
+
         .close:hover,
         .close:focus {
             color: #bbb;
             text-decoration: none;
             cursor: pointer;
         }
-    
+
         .modal-content, .close {
             animation-name: zoom;
             animation-duration: 0.6s;
         }
-    
+
         @keyframes zoom {
             from {
                 transform: scale(0)
@@ -173,7 +167,7 @@
                 transform: scale(1)
             }
         }
-        
+
         main {
             padding: 20px;
         }
@@ -188,52 +182,22 @@
             width: 100%;
         }
 
-        .search-form {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        .search-form input[type="text"] {
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-right: 10px;
-            width: 200px;
-        }
-
-        .search-form input[type="submit"] {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .search-form input[type="submit"]:hover {
-            background-color: #45a049;
-        }
     </style>
 </head>
 <body>
     <header>
         <nav>
             <ul>
-                <li>
-                    <form method="GET" action="{% url 'home' %}" class="search-form">
-                        {{ search_form.query.label_tag }}
-                        {{ search_form.query }}
-                        <input type="submit" value="Search">
-                    </form>
-                </li>
                 <li><a href="{% url 'home' %}">Home</a></li>
             </ul>
         </nav>
-        <div>
+        <div class="auth-buttons-container">
             {% if user.is_authenticated %}
+            <form method="GET" action="{% url 'home' %}" class="search-form">
+                {{ search_form.query.label_tag }}
+                {{ search_form.query }}
+                <input type="submit" value="Search">
+            </form>
                 <a href="{% url 'users:profile' %}"><button class="auth-buttons">Profile</button></a>
                 <a href="{% url 'users:logout' %}"><button class="auth-buttons">Logout</button></a>
             {% else %}
@@ -259,13 +223,12 @@
             modal.style.display = "block";
             modalImg.src = this.src;
         }
-    
+
         var span = document.getElementsByClassName("close")[0];
-    
+
         span.onclick = function() {
             modal.style.display = "none";
         }
     </script>
 </body>
 </html>
-

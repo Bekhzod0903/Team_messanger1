@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from .forms import GroupForm, MessageForm
 from django.shortcuts import render, get_object_or_404
 from .forms import SearchForm
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -51,10 +52,17 @@ def home_o(request):
 
 
 
-# class SendMessageView(View):
-#     def get(self, request, pk):
-#         group = Group.objects.get(id=pk)
-#         message_form = MessageForm()
-#         return render(request,'group.html', {'message_form': message_form, 'group': group})
-    
-    
+@login_required
+def send_message(request):
+    if request.method == 'POST':
+        form = MessageForm(request.POST, request.FILES)
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.sender = request.user
+            if 'attachment' in request.FILES:
+                message.attachment = request.FILES['attachment']
+            message.save()
+            return redirect('group')
+    else:
+        form = MessageForm()
+    return render(request, 'send_message.html', {'form': form})

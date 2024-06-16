@@ -1,12 +1,43 @@
 {% extends 'base.html' %}
 
 {% block title %}{{ group.name }}{% endblock %}
+
 {% block content %}
     <h1>Send a Message to {{ group.name }}</h1>
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" class="post-form" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ message_form.as_p }}
+        {{ form.as_p }}
         <button type="submit">Send</button>
     </form>
+
+    <div class="message-list">
+        {% for message in messages %}
+            <div class="message">
+                <p>{{ message.sender.username }}: {{ message.text }}</p>
+                {% if message.attachment %}
+                    {% if message.attachment.url|lower|endswith:'.jpg' or
+                          message.attachment.url|lower|endswith:'.jpeg' or
+                          message.attachment.url|lower|endswith:'.png' %}
+                        <img src="{{ message.attachment.url }}" alt="Image" style="max-width: 200px;">
+                    {% elif message.attachment.url|lower|endswith:'.mp3' %}
+                        <p>Attachment: <a href="{{ message.attachment.url }}">{{ message.attachment.name }}</a></p>
+                        <audio controls>
+                            <source src="{{ message.attachment.url }}" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    {% elif message.attachment.url|lower|endswith:'.mp4' %}
+                        <p>Attachment: <a href="{{ message.attachment.url }}">{{ message.attachment.name }}</a></p>
+                        <video controls style="max-width: 200px;">
+                            <source src="{{ message.attachment.url }}" type="video/mp4">
+                            Your browser does not support the video element.
+                        </video>
+                    {% else %}
+                        <p>Attachment: <a href="{{ message.attachment.url }}">{{ message.attachment.name }}</a></p>
+                    {% endif %}
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+
     <a href="{% url 'group' group.pk %}">Back to Group</a>
 {% endblock %}
