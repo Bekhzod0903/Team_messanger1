@@ -67,13 +67,13 @@ class ProfileView(View):
         return render(request, 'profile.html', context=context)
 
 
-class ProfileUpdateView(View):
-    def get(self, request):
-        update_form = ProfileUpdateForm(instance=request.user)
-        context = {
-            'form': update_form
-        }
-        return render(request, 'profile_update.html', context=context)
+# class ProfileUpdateView(View):
+#     def get(self, request):
+#         update_form = ProfileUpdateForm(instance=request.user)
+#         context = {
+#             'form': update_form
+#         }
+#         return render(request, 'profile_update.html', context=context)
 
     def post(self, request):
         update_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user)
@@ -89,3 +89,23 @@ class ProfileUpdateView(View):
 
 
 
+class ProfileUpdateView(View):
+    def get(self, request):
+        update_form = ProfileUpdateForm(instance=request.user)
+        context = {
+            'form': update_form
+        }
+        return render(request, 'profile_update.html', context=context)
+
+    def post(self, request):
+        update_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user)
+        if update_form.is_valid():
+            update_form.save()
+            messages.success(request, 'Profile updated successfully')
+            return redirect('users:profile')
+        else:
+            context = {
+                'form': update_form
+            }
+            # If form is not valid, render the form with error messages
+            return render(request, 'profile_update.html', context=context)
