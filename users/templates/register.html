@@ -70,19 +70,18 @@
         <form  method="post" enctype="multipart/form-data">
                 {% csrf_token %}
             {% for field in form %}
-                                <p >
-                                    {{ field.label_tag }}<br>
-                                    <div class="au-input au-input--full">{{ field }}</div>
-                                    {% if field.help_text %}
-                                        <br><small style="color: grey">{{ field.help_text }}</small>
-                                    {% endif %}
-                                    {% for error in field.errors %}
-                                        <p style="color: red">{{ error }}</p>
-                                    {% endfor %}
-                                </p>
+                <p >
+                    {{ field.label_tag }}<br>
+                    <div class="au-input au-input--full">{{ field }}</div>
+                    {% if field.help_text %}
+                        <br><small style="color: grey">{{ field.help_text }}</small>
+                    {% endif %}
+                    {% for error in field.errors %}
+                        <p style="color: red">{{ error }}</p>
+                    {% endfor %}
+                </p>
             {% endfor %}
 
-<!--            {{ form.as_p }}-->
             <button type="submit">Ro'yxatdan o'tish</button>
 
 
