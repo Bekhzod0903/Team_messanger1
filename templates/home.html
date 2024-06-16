@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}Home{% endblock %}
 {% block content %}
+{% if user.is_authenticated %}
     <h1 class="home-h">Welcome to the Home Page, <i> {{ user.username }} </i> </h1>
     <h2 class="home-h">Groups</h2>
 
@@ -9,4 +10,8 @@
             <li><a href="{% url 'group' group.pk %}">{{ group.name }}</a></li>
         {% endfor %}
     </ul>
+{% else %}
+<h1 class="home-h">Welcome to the Home Page <i> {{ user.username }} </i> </h1>
+{% endif %}
+
 {% endblock %}
