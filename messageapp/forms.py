@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django import forms
-from .models import Group, Message
+from .models import Group, Message, UserMessage
 
 class GroupForm(ModelForm):
     class Meta:
@@ -16,6 +16,16 @@ class MessageForm(forms.ModelForm):
         }
 
     attachment = forms.FileField(required=False)
+
+class UserMessageForm(forms.ModelForm):
+    class Meta:
+        model = UserMessage
+        fields = ['text', 'attachment']
+        widgets = {
+            'text': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Type a message...'}),
+        }
+    attachment = forms.FileField(required=False)
+    
 
 class SearchForm(forms.Form):
     query = forms.CharField(label='Search', max_length=100)

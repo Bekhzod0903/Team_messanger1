@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Send Message</title>
+  
+</head>
+<body>
+    <div class="container">
+        <h2>Send a message to {{ user.username }}</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Send Message</button>
+        </form>
+        <!-- <a href="{% url 'user' pk=user.id %}">Back to Profile</a> -->
+    </div>
+</body>
+</html>

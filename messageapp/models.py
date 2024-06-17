@@ -25,8 +25,8 @@ class Contact(models.Model):
 
 
 class Message(models.Model):
-    sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='message_sender')
-    receiver = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='message_receiver')
+    # sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='message_sender')
+    # receiver = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='message_receiver')
     text = models.TextField(blank=True, null=True)
     attachment = models.FileField(upload_to='attachments/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -39,4 +39,14 @@ class Message(models.Model):
     
     class Meta:
         db_table = 'messages'
-        
+
+class UserMessage(models.Model):
+    sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='message_sender')
+    receiver = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='message_receiver')
+    text = models.TextField(blank=True, null=True)
+    attachment = models.FileField(upload_to='attachments/', blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+    def __str__(self):
+        return f"{self.text} | {self.sender} -> {self.receiver}"

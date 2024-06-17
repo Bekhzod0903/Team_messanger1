@@ -12,5 +12,5 @@ class CustomUser(AbstractUser):
         db_table = 'custom_user'
 
     def __str__(self):
-        return f"ID: {self.pk} | Username: {self.username}"
+        return f"Username: {self.username}"
 
