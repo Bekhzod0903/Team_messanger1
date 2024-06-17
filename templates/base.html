@@ -28,21 +28,21 @@
             color: white;
         }
 
-        nav {
+        .navbar {
             display: flex;
             align-items: center;
         }
 
-        nav ul {
+        .navbar ul {
             display: flex;
             align-items: center;
         }
 
-        nav ul li {
+        .navbar ul li {
             margin: 0 15px;
         }
 
-        nav ul li a, .auth-buttons, .search-form input[type="submit"] {
+        .navbar ul li a, .auth-buttons, .search-form input[type="submit"] {
             color: white;
             font-size: 18px;
             font-weight: bold;
@@ -52,7 +52,7 @@
             border: 2px solid transparent;
         }
 
-        nav ul li a:hover, .auth-buttons:hover, .search-form input[type="submit"]:hover {
+        .navbar ul li a:hover, .auth-buttons:hover, .search-form input[type="submit"]:hover {
             color: #4CAF50;
             background-color: white;
         }
@@ -175,18 +175,144 @@
         footer {
             text-align: center;
             padding: 20px;
-            background-color: #333;
+            background-color:#218838;
             color: white;
             position: absolute;
             bottom: 0;
             width: 100%;
         }
 
+        .continer {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box;
+            margin: auto;
+        }
+        .title {
+            color: #495057;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+        .form {
+            display: flex;
+            flex-direction: column;
+        }
+        .form p {
+            margin-bottom: 15px;
+            font-size: 1rem;
+            color: #495057;
+        }
+        .input-text, .input-email, .textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .button-submit {
+            background-color: #28a745;
+            color: #ffffff;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+        .button-submit:hover {
+            background-color: #218838;
+        }
+        .nav {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .nav ul {
+            list-style: none;
+            padding: 0;
+        }
+        .nav li {
+            display: inline;
+            margin: 0 10px;
+        }
+        .nav a {
+            text-decoration: none;
+            color: #007bff;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+        .nav a:hover {
+            color: #0056b3;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(140, 243, 119, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0.1, 0.1, 0.1);
+        }
+
+        .home-h {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .home-section {
+            margin-bottom: 30px;
+            padding: 15px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.699);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .home-heading {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .group-list,
+        .user-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .group-list li,
+        .user-list li {
+            margin-bottom: 5px;
+        }
+
+        .group-list li a,
+        .user-list li a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        .group-list li a:hover,
+        .user-list li a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
     <header>
-        <nav>
+        <nav class="navbar">
             <ul>
                 <li><a href="{% url 'home' %}">Home</a></li>
             </ul>
