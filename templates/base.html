@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Message App{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -399,6 +401,127 @@
         .send-message-link:hover {
             background-color:#218838;
         }
+
+        .chat-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            text-align: center;
+            border-radius: 40px;
+        }
+
+        .catalog-button {
+            display: inline-flex;
+            text-align: center;
+            align-items: center;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #fff;
+            background-color: #28a745; /* Primary blue color */
+            border: none;
+            border-radius: 5px  ;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .catalog-button i {
+            margin-right: 10px;
+        }
+
+        .catalog-button:hover {
+            background-color:#218838; /* Darker blue on hover */
+            transform: scale(1.05); /* Slightly enlarge on hover */
+        }
+
+        .catalog-button:active {
+            background-color:#218838; /* Even darker blue on active */
+            transform: scale(1); /* Reset scale on active */
+        }
+
+        .catalog-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgb(30, 255, 0); /* Blue focus ring */
+        }
+
+        .chat-box {
+            width: 300px;
+            max-height: 400px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            bottom: 70px;
+            right: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .chat-box.hidden {
+            display: none;
+        }
+
+        .chat-header {
+            background-color: #8A2BE2;
+            color: white;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .chat-body {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+        }
+
+        .chat-footer {
+            display: flex;
+            border-top: 1px solid #ddd;
+        }
+
+        .chat-footer input {
+            flex: 1;
+            border: none;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 0 0 0 10px;
+        }
+
+        .chat-footer button {
+            padding: 10px;
+            background-color: #8A2BE2;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 0 0 10px 0;
+        }
+
+        .chat-footer button:hover {
+            background-color: #8A2BE2;
+        }
+
+        .chat-message {
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 80%;
+        }
+
+        .chat-message.user {
+            background-color: #8A2BE2;
+            color: white;
+            align-self: flex-end;
+        }
+
+        .chat-message.bot {
+            background-color: #e0e0e0;
+            color: black;
+            align-self: flex-start;
+        }
     </style>
 </head>
 <body>
@@ -428,8 +551,84 @@
         {% endblock %}
     </main>
 
+    <div class="chat-container">
+        <button class="catalog-button" onclick="toggleChat()">
+            <i class="fas fa-comments"></i>
+            <p>Help</p>
+        </button>
+        <div id="chat-box" class="chat-box hidden">
+            <div class="chat-header">
+                <h2>Catalog Chat</h2>
+            </div>
+            <div class="chat-body" id="chat-body">
+
+            </div>
+            <div class="chat-footer">
+                <input type="text" id="user-input" placeholder="Ask a question..." onkeypress="handleKeyPress(event)">
+                <button onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                const messages = document.querySelectorAll('.messages li');
+                messages.forEach(function(message) {
+                    message.style.display = 'none';
+                });
+            }, 3000);
+        });
+
+
+        const responses = {
+            "Salom": "Salom 👋 \n Sizga qanday yordam bera olaman",
+            "Qanday sms yozaman": "Sms yozish uchun home pageda chatlarni tanlang",
+            "Sizlarga qanday bog'lansam bo'ladi?": "Tel: +998950955538",
+            "default": "Kechirasiz, Men bu savolga javob bera olmayman 😥.Qo'shimcha ma'lumot olish uchun Telegramda @anvar_bek_009 ga murojat qiling"
+        };
+
+        function toggleChat() {
+            document.getElementById('chat-box').classList.toggle('hidden');
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('user-input');
+            const message = input.value.trim();
+            if (message) {
+                addMessage('user', message);
+                input.value = '';
+                setTimeout(() => {
+                    addMessage('bot', getResponse(message));
+                }, 500);
+            }
+        }
+
+        function addMessage(sender, text) {
+            const chatBody = document.getElementById('chat-body');
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('chat-message', sender);
+            messageElement.textContent = text;
+            chatBody.appendChild(messageElement);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        function getResponse(message) {
+            return responses[message] || responses['default'];
+        }
+
+
+
+
+
+
+
         var modal = document.getElementById("myModal");
 
         var img = document.getElementById("profileImg");
