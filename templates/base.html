@@ -14,12 +14,13 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: Georgia, serif;    
             background-color: #f4f4f4;
-            color: #333;
+
         }
 
         header {
+            font-family: Georgia, serif;   
             background-color: #4CAF50;
             padding: 10px 20px;
             display: flex;
@@ -29,20 +30,24 @@
         }
 
         .navbar {
+            font-family: Georgia, serif;   
             display: flex;
             align-items: center;
         }
 
         .navbar ul {
+            font-family: Georgia, serif;   
             display: flex;
             align-items: center;
         }
 
         .navbar ul li {
+            font-family: Georgia, serif;   
             margin: 0 15px;
         }
 
         .navbar ul li a, .auth-buttons, .search-form input[type="submit"] {
+            font-family: Georgia, serif;   
             color: white;
             font-size: 18px;
             font-weight: bold;
@@ -53,27 +58,32 @@
         }
 
         .navbar ul li a:hover, .auth-buttons:hover, .search-form input[type="submit"]:hover {
+            font-family: Georgia, serif;   
             color: #4CAF50;
             background-color: white;
         }
 
         .auth-buttons-container {
+            font-family: Georgia, serif;   
             display: flex;
             align-items: center;
         }
 
         .auth-buttons {
+            font-family: Georgia, serif;   
             background: #4CAF50;
             margin-left: 10px;
             cursor: pointer;
         }
 
         .search-form {
+            font-family: Georgia, serif;   
             display: flex;
             align-items: center;
         }
 
         .search-form input[type="text"] {
+            font-family: Georgia, serif;   
             padding: 5px;
             font-size: 16px;
             border: 1px solid #ccc;
@@ -82,11 +92,13 @@
         }
 
         .search-form input[type="submit"] {
+            font-family: Georgia, serif;   
             background: #4CAF50;
             cursor: pointer;
         }
 
         .profile-container {
+            font-family: Georgia, serif;   
             max-width: 400px;
             margin: 0 auto;
             text-align: center;
@@ -98,6 +110,7 @@
         }
 
         .profile-image {
+            font-family: Georgia, serif;   
             width: 150px;
             height: 150px;
             border-radius: 50%;
@@ -109,15 +122,18 @@
         }
 
         .profile-info {
+            font-family: Georgia, serif;   
             margin: 10px 0;
             font-size: 18px;
         }
 
         .profile-info a {
+            font-family: Georgia, serif;   
             color: #4CAF50;
         }
 
         .modal {
+            font-family: Georgia, serif;   
             display: none;
             position: fixed;
             z-index: 1000;
@@ -130,6 +146,7 @@
         }
 
         .modal-content {
+            font-family: Georgia, serif;   
             margin: auto;
             display: block;
             width: 80%;
@@ -155,6 +172,7 @@
         }
 
         .modal-content, .close {
+            font-family: Georgia, serif;   
             animation-name: zoom;
             animation-duration: 0.6s;
         }
@@ -167,12 +185,13 @@
                 transform: scale(1)
             }
         }
-
+   
         main {
             padding: 20px;
         }
 
         footer {
+            font-family: Georgia, serif;   
             text-align: center;
             padding: 20px;
             background-color:#218838;
@@ -183,6 +202,7 @@
         }
 
         .continer {
+            font-family: Georgia, serif;   
             background-color: #ffffff;
             padding: 30px;
             border-radius: 10px;
@@ -193,6 +213,7 @@
             margin: auto;
         }
         .title {
+            font-family: Georgia, serif;   
             color: #495057;
             margin-bottom: 25px;
             font-size: 1.5rem;
@@ -307,6 +328,76 @@
         .group-list li a:hover,
         .user-list li a:hover {
             text-decoration: underline;
+        }
+
+        .message-container {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .message-header {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #28a745;
+        }
+
+        .message-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .message-item {
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+        }
+
+        .message-text {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .message-attachment a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .message-attachment a:hover {
+            text-decoration: underline;
+        }
+
+        .message-meta {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .no-messages {
+            padding: 15px;
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .send-message-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color:#28a745;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .send-message-link:hover {
+            background-color:#218838;
         }
     </style>
 </head>
