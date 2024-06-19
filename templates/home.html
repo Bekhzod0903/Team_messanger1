@@ -21,7 +21,7 @@
                 <h2 class="home-heading">Users</h2>
                 <ul class="user-list">
                     {% for user in users %}
-                        <li><a href="{% url 'user' user.pk %}">{{ user.username }}</a></li>
+                        <li><a href="{% url 'user_messages' user.pk %}">{{ user.username }}</a></li>
                     {% endfor %}
                 </ul>
             </section>
