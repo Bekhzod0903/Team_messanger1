@@ -44,14 +44,14 @@ class GroupView(View):
 
 
 
-def home_o(request):
-    search_form = SearchForm(request.GET or None)
-
-    if search_form.is_valid():
-        query = search_form.cleaned_data['query']
-        groups = groups.filter(name__icontains=query)
-
-    return render(request, 'base.html', {'search_form': search_form})
+# def home_o(request):
+#     search_form = SearchForm(request.GET or None)
+#
+#     if search_form.is_valid():
+#         query = search_form.cleaned_data['query']
+#         groups = groups.filter(name__icontains=query)
+#
+#     return render(request, 'base.html', {'search_form': search_form})
 
 
 
@@ -111,3 +111,22 @@ class UserMessages(View):
             (Q(sender=request.user) & Q(receiver=user)) | (Q(sender=user) & Q(receiver=request.user))
         ).order_by('created_at')
         return render(request, 'user_messages.html', {'messages': messages, 'user': user, 'form': form})
+
+
+class SearchView(View):
+    def get(self, request):
+        query = request.GET.get('q', '')
+        if query:
+            users = CustomUser.objects.filter(
+                Q(username__icontains=query) |
+                Q(first_name__icontains=query) |
+                Q(last_name__icontains=query)
+            )
+        else:
+            users = CustomUser.objects.none()
+
+        context = {
+            'users': users,
+            'query': query
+        }
+        return render(request, 'search.html', context=context)

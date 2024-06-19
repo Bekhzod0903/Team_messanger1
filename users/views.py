@@ -6,6 +6,8 @@ from django.contrib.auth import login, logout
 from django.contrib import messages
 # from products.models import Logo
 # from products.models import Products
+from .models import CustomUser
+from django.shortcuts import get_object_or_404
 # Create your views here.
 
 
@@ -58,10 +60,13 @@ class LogoutView(View):
 
 
 class ProfileView(View):
-    def get(self, request):
+    def get(self, request, username):
         # logo = Logo.objects.first()
+        user = get_object_or_404(CustomUser, username=username)
+        is_own_profile = (user == request.user)
         context = {
-            'user': request.user,
+            'user': user,
+            'is_own_profile': is_own_profile
            
         }
         return render(request, 'profile.html', context=context)
@@ -75,14 +80,18 @@ class ProfileView(View):
 #         }
 #         return render(request, 'profile_update.html', context=context)
 
-    def post(self, request):
+    def post(self, request, username):
+        user = get_object_or_404(CustomUser, username=username)
+        is_own_profile = (user == request.user)
         update_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user)
         if update_form.is_valid():
             update_form.save()
             return redirect('users:profile')
         else:
             context = {
-                'form': update_form
+                'form': update_form,
+                'user': user,
+                'is_own_profile': is_own_profile
             }
             messages.error(request,'Something went wrong')
             return render(request, 'profile_update.html', context=context)
@@ -102,10 +111,9 @@ class ProfileUpdateView(View):
         if update_form.is_valid():
             update_form.save()
             messages.success(request, 'Profile updated successfully')
-            return redirect('users:profile')
+            return redirect('users:profile', username=request.user.username)
         else:
             context = {
                 'form': update_form
             }
-            # If form is not valid, render the form with error messages
             return render(request, 'profile_update.html', context=context)

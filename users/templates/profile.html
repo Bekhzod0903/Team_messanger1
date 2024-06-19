@@ -1,22 +1,32 @@
+
 {% extends 'base.html' %}
 {% block title %}
   Profile
 {% endblock %}
 
 {% block content %}
+{% if is_own_profile %}
+    <div class="profile-container">
+        <img src="{{ user.image.url }}" alt="User Image" class="profile-image" id="profileImg">
+        <h3 class="profile-username">Username: {{ user.username }}</h3>
+        <h3 class="profile-info">First name: {{ user.first_name }}</h3>
+        <h3 class="profile-info">Last name: {{ user.last_name }}</h3>
+        <h3 class="profile-info">Email: {{ user.email }}</h3>
+        <!-- Edit Profile Button -->
+        <a href="{% url 'users:profile_update' %}" class="edit-profile-button">Edit Profile</a>
+    </div>
 
-<div class="profile-container">
-    <img src="{{ user.image.url }}" alt="User Image" class="profile-image" id="profileImg">
-    <h3 class="profile-username">Username: {{ user.username }}</h3>
-    <h3 class="profile-info">First name: {{ user.first_name }}</h3>
-    <h3 class="profile-info">Last name: {{ user.last_name }}</h3>
-    <h3 class="profile-info">Email: {{ user.email }}</h3>
-    <!-- Edit Profile Button -->
-    <a href="{% url 'users:profile_update' %}" class="edit-profile-button">Edit Profile</a>
-</div>
+    <div id="myModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="img01">
+    </div>
 
-<div id="myModal" class="modal">
-    <span class="close">&times;</span>
-    <img class="modal-content" id="img01">
-</div>
+{% else %}
+    <div class="profile-container">
+        <img src="{{ user.image.url }}" alt="User Image" class="profile-image" id="profileImg">
+        <h2>{{ user.username }}</h2>
+        <p>Username: {{ user.username }}</p>
+        <a href="{% url 'user' user.pk %}"><button class="auth-buttons">Send a Message</button></a>
+    </div>
+{% endif %}
 {% endblock %}
