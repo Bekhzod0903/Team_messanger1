@@ -17,6 +17,8 @@ class MessageForm(forms.ModelForm):
 
     attachment = forms.FileField(required=False)
 
+
+
 class UserMessageForm(forms.ModelForm):
     class Meta:
         model = UserMessage
@@ -24,6 +26,7 @@ class UserMessageForm(forms.ModelForm):
         widgets = {
             'text': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Type a message...'}),
         }
+
     attachment = forms.FileField(required=False)
     
 

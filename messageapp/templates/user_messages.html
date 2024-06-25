@@ -1,47 +1,295 @@
-{% extends 'base.html' %}
-{% block title %}{{user.username}}{% endblock %}
-{% block content %}
+<!DOCTYPE html>
+<html lang="en">
 
-<div>
-    <h2>Messages between {{ user.username }} and {{ request.user.username }}</h2>
-    <ul class="messages-list">
-        {% for message in messages %}
-        <li class="message {% if message.sender == request.user %}sent{% else %}received{% endif %}">
-            <p>{{ message.text }}</p>
-            {% if message.attachment %}
-            <p><a href="{{ message.attachment.url }}">Download attachment</a></p>
-            {% endif %}
-            <p><small>Sent by {{ message.sender.username }} to {{ message.receiver.username }} at {{ message.created_at }}</small></p>
-        </li>
-        {% empty %}
-        <li>No messages found.</li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'user' pk=user.id %}">Send a new message</a>
-</div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ user.username }}</title>
+    {% load static %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: Times New Roman;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Ensure full height of viewport */
+        }
 
-<style>
-    .messages-list {
-        list-style-type: none;
-        padding: 0;
-    }
-    .message {
-        max-width: 60%;
-        margin: 10px 0;
-        padding: 10px;
-        border-radius: 10px;
-        clear: both;
-    }
-    .message.sent {
-        background-color: #d1e7dd;
-        margin-left: auto;
-        text-align: right;
-    }
-    .message.received {
-        background-color: #f8d7da;
-        margin-right: auto;
-        text-align: left;
-    }
-</style>
+        .chat-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden; /* Prevent overflow of container */
+            position: relative; /* Ensure relative positioning */
+        }
 
-{% endblock %}
+        .user-list {
+            width: 25%;
+            border-right: 2px solid #ccc;
+            padding: 10px;
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+            height: 134vh;
+
+        }
+
+        .user-list ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .user-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        .user-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        .user-image {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .user-info {
+            flex-grow: 1;
+        }
+
+        .last-message {
+            font-size: 0.8em;
+            color: gray;
+            margin-top: 5px;
+        }
+
+        .chat-area {
+            width: 75%;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            position: relative;
+            margin-left: auto;
+        }
+
+        .chat-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .chat-header img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .messages-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-bottom: 0;
+        }
+
+        .message {
+            max-width: 40%;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .message.sent {
+            background-color: #d1e7dd;
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .message.received {
+            background-color: #f8d7da;
+            margin-right: auto;
+            text-align: left;
+        }
+
+        .message p {
+            margin: 0;
+        }
+
+        .message small {
+            font-size: 0.7em;
+            color: #888;
+        }
+
+        .footer {
+            height: 50px;
+            background-color: #f1f1f1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .footer span {
+            text-align: center;
+            color: #888;
+        }
+
+        .message-form {
+            display: flex;
+            align-items: center;
+            padding: 0px;
+            position: fixed;
+            bottom: 0px;
+            left: calc(28% + 1px);
+            width: calc(72% - 1px);
+
+        }
+
+        .attachment-input {
+            display: none;
+        }
+
+        .attachment-label {
+            cursor: pointer;
+            font-size: 1.2em;
+            margin-right: 10px;
+        }
+
+        .message-form textarea {
+            flex-grow: 1;
+            margin-right: 10px;
+            height: 20px;
+            max-height: 50px; /* Set the maximum height */
+            resize: none; /* Prevent resizing */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 5px;
+            width: 50%;
+        }
+
+        .send-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2em;
+            color: #007bff;
+        }
+
+        .send-button:hover {
+            color: #0056b3;
+        }
+        .edit-message-link, .delete-button {
+            margin-left: 5px;
+            color: #007bff;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .edit-message-link:hover, .delete-button:hover {
+            color: #0056b3;
+        }
+
+        .delete-button {
+            background: none;
+            border: none;
+        }
+
+        .spacer {
+            height: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-4">
+        <div class="chat-container">
+            <div class="user-list">
+                <h3><a href="{% url 'home' %}">Users</a></h3>
+                <div class="search-form">
+                    <form action="{% url 'search' %}" method="get" style="display: inline;">
+                        <input type="search" name="q" placeholder="Search..." required>
+                    </form>
+                </div>
+                <br>
+                <ul>
+                    {% for other_user, last_message in user_last_messages %}
+                    <li class="user-item">
+                        <img src="{{ other_user.image.url }}" alt="{{ other_user.username }}" class="user-image">
+                        <div class="user-info">
+                            <a href="{% url 'to_user' pk=other_user.id %}">{{ other_user.username }}</a>
+                            <p class="last-message">
+                                {{ last_message.text|truncatewords:10 }}
+                            </p>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="chat-area">
+                <div class="chat-header">
+                    <img src="{{ user.image.url }}" alt="{{ user.username }}" class="user-image">
+                    <h2>{{ user.username }}</h2>
+                </div>
+                <ul class="messages-list" id="messagesList">
+                    {% for message in send_message|dictsort:"created_at" %}
+                    <li class="message {% if message.sender == request.user %}sent{% else %}received{% endif %}">
+                        <p>{{ message.text }}</p>
+                        {% if message.attachment %}
+                        <p><a href="{{ message.attachment.url }}"><i class="fas fa-download"></i></a></p>
+                        {% endif %}
+                        <p><small>Message sent by {{ message.sender.username }} on {{ message.created_at }}.</small></p>
+                        {% if message.sender == request.user %}
+                        <a href="#" class="edit-message-link">
+                            <i class="fas fa-pencil-alt"></i>
+                        </a>
+                        <form action="#" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="delete-button">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </form>
+                        {% endif %}
+                    </li>
+                    {% empty %}
+                    <li>No messages in this chat.</li>
+                    {% endfor %}
+                    <div class="spacer"></div> <!-- Extra space below the last message -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" class="message-form">
+        {% csrf_token %}
+        <input type="file" name="attachment" id="attachment" class="attachment-input">
+        <label for="attachment" class="attachment-label">
+            <i class="fas fa-paperclip"></i>
+        </label>
+        <textarea name="text" placeholder="Xabar yozing..." required></textarea>
+        <button type="submit" class="send-button">
+            <i class="fas fa-paper-plane"></i>
+        </button>
+    </form>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const messagesList = document.getElementById('messagesList');
+            messagesList.scrollTop = messagesList.scrollHeight;
+        });
+    </script>
+</body>
+
+</html>

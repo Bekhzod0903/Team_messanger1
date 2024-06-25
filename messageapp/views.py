@@ -9,13 +9,16 @@ from .forms import SearchForm
 from users.models import CustomUser
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.contrib.auth import get_user_model
 # Create your views here.
 
 
-def home(request):
-    groups = Group.objects.all()
-    users = CustomUser.objects.all()
-    return render(request, 'home.html', {'groups': groups, 'users': users})
+class HomeView(View):
+    def get(self, request):
+        groups = Group.objects.all()
+        owner = request.user
+        users = get_user_model().objects.exclude(id=owner.id)
+        return render(request, 'home.html', {'groups': groups, 'users': users})
 
 
 class GroupView(View):
@@ -38,7 +41,7 @@ class GroupView(View):
         else:
             context = {'message_form': message_form, 'group': group}
 
-            return render(request,'group.html', context=context)
+            return render(request, 'group.html', context=context)
   
 
 
@@ -71,47 +74,77 @@ def send_message(request):
     return render(request, 'send_message.html', {'form': form})
 
 
-@login_required
-def send_message_to_user(request, pk):
-    user = get_object_or_404(CustomUser, id=pk)
-    if request.method == 'POST':
-        form = UserMessageForm(request.POST, request.FILES)
-        if form.is_valid():
-            message = form.save(commit=False)
-            message.sender = request.user
-            message.receiver = user
-            if 'attachment' in request.FILES:
-                message.attachment = request.FILES['attachment']
-            message.save()
-            return redirect('user_messages', pk=user.id)
-    else:
-        form = MessageForm()
-    return render(request, 'send_message_to_user.html', {'form': form, 'user': user})
+# @login_required
+# def send_message_to_user(request, pk):
+#     user = get_object_or_404(CustomUser, id=pk)
+#     if request.method == 'POST':
+#         form = UserMessageForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             message = form.save(commit=False)
+#             message.sender = request.user
+#             message.receiver = user
+#             if 'attachment' in request.FILES:
+#                 message.attachment = request.FILES['attachment']
+#             message.save()
+#             return redirect('user_messages', pk=user.id)
+#     else:
+#         form = MessageForm()
+#     return render(request, 'send_message_to_user.html', {'form': form, 'user': user})
 
 
-class UserMessages(View):
+class UserMessagesView(View):
     def get(self, request, pk):
         user = get_object_or_404(CustomUser, id=pk)
-        messages = UserMessage.objects.filter(
+        send_message = UserMessage.objects.filter(
             (Q(sender=request.user) & Q(receiver=user)) | (Q(sender=user) & Q(receiver=request.user))
-        ).order_by('created_at')
-        form = MessageForm()
-        return render(request, 'user_messages.html', {'messages': messages, 'user': user, 'form': form})
+        ).order_by('-created_at')
+        form = UserMessageForm()
+
+        other_users = CustomUser.objects.exclude(id=request.user.id)
+        user_last_messages = []
+        for other_user in other_users:
+            last_message = UserMessage.objects.filter(
+                (Q(sender=request.user) & Q(receiver=other_user)) | (Q(sender=other_user) & Q(receiver=request.user))
+            ).order_by('-created_at').first()
+            user_last_messages.append((other_user, last_message))
+
+        context = {
+            'user': user,
+            'form': form,
+            'send_message': send_message,
+            'user_last_messages': user_last_messages,
+        }
+        return render(request, 'user_messages.html', context=context)
 
     def post(self, request, pk):
         user = get_object_or_404(CustomUser, id=pk)
-        form = MessageForm(request.POST, request.FILES)
+        form = UserMessageForm(request.POST, request.FILES)
         if form.is_valid():
-            message = form.save(commit=False)
-            message.sender = request.user
-            message.receiver = user
-            message.save()
-            return redirect('user_messages', pk=pk)
-        messages = UserMessage.objects.filter(
-            (Q(sender=request.user) & Q(receiver=user)) | (Q(sender=user) & Q(receiver=request.user))
-        ).order_by('created_at')
-        return render(request, 'user_messages.html', {'messages': messages, 'user': user, 'form': form})
+            send_message = form.save(commit=False)
+            send_message.sender = request.user
+            send_message.receiver = user
+            send_message.save()
+            return redirect('to_user', pk=pk)
 
+        send_message = UserMessage.objects.filter(
+            (Q(sender=request.user) & Q(receiver=user)) | (Q(sender=user) & Q(receiver=request.user))
+        ).order_by('-created_at')
+
+        other_users = CustomUser.objects.exclude(id=request.user.id)
+        user_last_messages = []
+        for other_user in other_users:
+            last_message = UserMessage.objects.filter(
+                (Q(sender=request.user) & Q(receiver=other_user)) | (Q(sender=other_user) & Q(receiver=request.user))
+            ).order_by('-created_at').first()
+            user_last_messages.append((other_user, last_message))
+
+        context = {
+            'user': user,
+            'form': form,
+            'send_message': send_message,
+            'user_last_messages': user_last_messages,
+        }
+        return render(request, 'Chat/user_messages.html', context=context)
 
 class SearchView(View):
     def get(self, request):
