@@ -9,6 +9,7 @@ from .forms import SearchForm
 from users.models import CustomUser
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from .models import Notification
 # Create your views here.
 
 
@@ -130,3 +131,12 @@ class SearchView(View):
             'query': query
         }
         return render(request, 'search.html', context=context)
+
+@login_required
+def notifications(request):
+    user = request.user
+    notifications = Notification.objects.filter(user=user, read=False)
+    print(f"User: {user}, Notifications: {notifications}")  # Debug print statement
+    return render(request, 'notifications.html', {'notifications': notifications})
+
+

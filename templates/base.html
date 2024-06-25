@@ -540,6 +540,9 @@
             </div>
                 <a href="{% url 'users:profile' user.username %}"><button class="auth-buttons">Profile</button></a>
                 <a href="{% url 'users:logout' %}"><button class="auth-buttons">Logout</button></a>
+                <a href="{% url 'about:about_site' %}"><button class="auth-buttons">About</button></a>
+                <a href="{% url 'notifications' %}"><button class="auth-buttons">Notification</button></a>
+
             {% else %}
                 <a href="{% url 'users:register' %}"><button class="auth-buttons">Register</button></a>
                 <a href="{% url 'users:login' %}"><button class="auth-buttons">Login</button></a>
