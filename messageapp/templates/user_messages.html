@@ -30,7 +30,7 @@
             overflow-y: auto;
             position: sticky;
             top: 0;
-            height: 134vh;
+            height: auto;
 
         }
 
@@ -246,16 +246,16 @@
                 <ul class="messages-list" id="messagesList">
                     {% for message in send_message|dictsort:"created_at" %}
                     <li class="message {% if message.sender == request.user %}sent{% else %}received{% endif %}">
-                        <p>{{ message.text }}</p>
+                        <p>{{ message.text|linebreaksbr }}</p>
                         {% if message.attachment %}
                         <p><a href="{{ message.attachment.url }}"><i class="fas fa-download"></i></a></p>
                         {% endif %}
                         <p><small>Message sent by {{ message.sender.username }} on {{ message.created_at }}.</small></p>
                         {% if message.sender == request.user %}
-                        <a href="#" class="edit-message-link">
+                        <a href="{% url 'edit_message' message.pk %}" class="edit-message-link">
                             <i class="fas fa-pencil-alt"></i>
                         </a>
-                        <form action="#" method="post" style="display:inline;">
+                        <form action="{% url 'delete_message' message.pk %}" method="post" style="display:inline;">
                             {% csrf_token %}
                             <button type="submit" class="delete-button">
                                 <i class="fas fa-trash-alt"></i>

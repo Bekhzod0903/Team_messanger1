@@ -1,19 +1,17 @@
-from django.conf import settings
 from django.shortcuts import redirect, render
 from django.views import View
 from .models import Group, Message, UserMessage
 from django.http import JsonResponse
-from .forms import GroupForm, MessageForm, UserMessageForm
+from .forms import GroupForm, MessageForm, UserMessageForm, EditMessageForm
 from django.shortcuts import render, get_object_or_404
 from .forms import SearchForm
 from users.models import CustomUser
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-<<<<<<< HEAD
 from django.contrib.auth import get_user_model
-=======
 from .models import Notification
->>>>>>> c32061301a0d02d14aed567c673896fe18b1f99a
+from django.contrib import messages
+from django.http import HttpResponseForbidden
 # Create your views here.
 
 
@@ -176,3 +174,44 @@ def notifications(request):
     return render(request, 'notifications.html', {'notifications': notifications})
 
 
+class EditMessageView(View):
+    def get(self, request, pk):
+        message = get_object_or_404(UserMessage, pk=pk)
+        if not message.user_auth(request.user):
+            messages.error(request, "You can't edit this message!")
+            return redirect('to_user', pk=message.receiver.pk)
+
+        edit_message_form = EditMessageForm(instance=message)
+        context = {
+            'edit_message_form': edit_message_form,
+            'message': message,
+        }
+        return render(request, 'edit_message.html', context=context)
+
+    def post(self, request, pk):
+        message = get_object_or_404(UserMessage, pk=pk)
+        if not message.user_auth(request.user):
+            messages.error(request, "You can't edit this message!")
+            return redirect('to_user', pk=message.receiver.pk)
+
+        edit_message_form = EditMessageForm(request.POST, instance=message)
+        if edit_message_form.is_valid():
+            edit_message_form.save()
+            messages.success(request, "Message edited successfully.")
+            return redirect('to_user', pk=message.receiver.pk)
+
+        context = {
+            'edit_message_form': edit_message_form,
+            'message': message,
+        }
+        return render(request, 'edit_message.html', context=context)
+
+
+class DeleteMessageView(View):
+    def post(self, request, pk):
+        message = get_object_or_404(UserMessage, pk=pk)
+        if message.sender == request.user:
+            message.delete()
+            return redirect('to_user', pk=message.receiver.pk)
+        else:
+            return HttpResponseForbidden('Siz bu xabarni o\'chira olmaysiz!')

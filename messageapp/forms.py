@@ -42,6 +42,13 @@ class NotificationForm(forms.ModelForm):
         model = Notification
         fields = ['user', 'read', 'message']  # timestamp va read filds mana
 
+class EditMessageForm(forms.ModelForm):
+    class Meta:
+        model = UserMessage
+        fields = ['text', 'attachment']
+        widgets = {
+            'text': forms.Textarea(attrs={'rows': 3}),
+        }
 
 
 

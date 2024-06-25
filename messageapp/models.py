@@ -53,6 +53,17 @@ class UserMessage(models.Model):
     def __str__(self):
         return f"{self.text} | {self.sender} -> {self.receiver}"
 
+    def user_auth(self, user):
+        return self.sender == user
+
+    def edit_message(self, text):
+        self.text = text
+        text.save()
+
+
+
+
+
 from django.db import models
 from django.conf import settings
 
