@@ -8,10 +8,14 @@ from .forms import SearchForm
 from users.models import CustomUser
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+<<<<<<< HEAD
 from django.contrib.auth import get_user_model
 from .models import Notification
 from django.contrib import messages
 from django.http import HttpResponseForbidden
+=======
+# from .models import Notification
+>>>>>>> 4d2d9dda974b54333cf935bcdfc117861846d930
 # Create your views here.
 
 
@@ -166,13 +170,14 @@ class SearchView(View):
         }
         return render(request, 'search.html', context=context)
 
-@login_required
+from django.shortcuts import render
+from .models import Notification
+
 def notifications(request):
-    user = request.user
-    notifications = Notification.objects.filter(user=user, read=False)
-    print(f"User: {user}, Notifications: {notifications}")  # Debug print statement
+    notifications = Notification.objects.filter(user=request.user).order_by('-timestamp')
     return render(request, 'notifications.html', {'notifications': notifications})
 
+<<<<<<< HEAD
 
 class EditMessageView(View):
     def get(self, request, pk):
@@ -215,3 +220,10 @@ class DeleteMessageView(View):
             return redirect('to_user', pk=message.receiver.pk)
         else:
             return HttpResponseForbidden('Siz bu xabarni o\'chira olmaysiz!')
+=======
+def mark_as_read(request, notification_id):
+    notification = Notification.objects.get(id=notification_id)
+    notification.is_read = True
+    notification.save()
+    return redirect('notifications')
+>>>>>>> 4d2d9dda974b54333cf935bcdfc117861846d930

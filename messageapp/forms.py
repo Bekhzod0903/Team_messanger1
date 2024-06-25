@@ -34,13 +34,13 @@ class SearchForm(forms.Form):
     query = forms.CharField(label='Search', max_length=100)
 
 # forms.py faylida
-from django import forms
-from .models import Notification
-
-class NotificationForm(forms.ModelForm):
-    class Meta:
-        model = Notification
-        fields = ['user', 'read', 'message']  # timestamp va read filds mana
+# from django import forms
+# from .models import Notification
+#
+# class NotificationForm(forms.ModelForm):
+#     class Meta:
+#         model = Notification
+#         fields = ['user', 'read', 'message']  # timestamp va read filds mana
 
 class EditMessageForm(forms.ModelForm):
     class Meta:

@@ -59,17 +59,32 @@ class LogoutView(View):
         return redirect('home')
 
 
+from django.shortcuts import get_object_or_404, render
+from django.views import View
+from django.contrib.auth import get_user_model
+from .models import Subscription
+
+User = get_user_model()
+
 class ProfileView(View):
     def get(self, request, username):
-        # logo = Logo.objects.first()
-        user = get_object_or_404(CustomUser, username=username)
+        user = get_object_or_404(User, username=username)
         is_own_profile = (user == request.user)
+        subscriptions = Subscription.objects.filter(subscriber=user)
+        subscribers = Subscription.objects.filter(user=user)
+
+        # Check if the profile owner is subscribed to the visiting user
+        is_subscribed = Subscription.objects.filter(user=user, subscriber=request.user).exists()
+
         context = {
             'user': user,
-            'is_own_profile': is_own_profile
-           
+            'is_own_profile': is_own_profile,
+            'subscriptions': subscriptions,
+            'subscribers': subscribers,
+            'is_subscribed': is_subscribed,
         }
         return render(request, 'profile.html', context=context)
+
 
 
 # class ProfileUpdateView(View):
@@ -117,3 +132,22 @@ class ProfileUpdateView(View):
                 'form': update_form
             }
             return render(request, 'profile_update.html', context=context)
+
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404, redirect
+from .models import Subscription
+
+User = get_user_model()
+
+def subscribe(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    subscriber = request.user
+    Subscription.objects.create(user=user, subscriber=subscriber)
+    return redirect('users:profile', username=user.username)
+
+def unsubscribe(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    subscriber = request.user
+    Subscription.objects.filter(user=user, subscriber=subscriber).delete()
+    return redirect('users:profile', username=user.username)
