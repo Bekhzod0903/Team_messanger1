@@ -9,7 +9,7 @@ from .forms import SearchForm
 from users.models import CustomUser
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from .models import Notification
+# from .models import Notification
 # Create your views here.
 
 
@@ -132,11 +132,15 @@ class SearchView(View):
         }
         return render(request, 'search.html', context=context)
 
-@login_required
+from django.shortcuts import render
+from .models import Notification
+
 def notifications(request):
-    user = request.user
-    notifications = Notification.objects.filter(user=user, read=False)
-    print(f"User: {user}, Notifications: {notifications}")  # Debug print statement
+    notifications = Notification.objects.filter(user=request.user).order_by('-timestamp')
     return render(request, 'notifications.html', {'notifications': notifications})
 
-
+def mark_as_read(request, notification_id):
+    notification = Notification.objects.get(id=notification_id)
+    notification.is_read = True
+    notification.save()
+    return redirect('notifications')
