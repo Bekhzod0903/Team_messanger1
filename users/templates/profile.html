@@ -96,6 +96,19 @@
             width: 100%;
         }
     }
+    .subscription-button {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 10px 2px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
 </style>
 
 {% if is_own_profile %}
@@ -137,19 +150,16 @@
         <img src="{{ user.image.url }}" alt="User Image" class="profile-image" id="profileImg">
         <h2>{{ user.username }}</h2>
         <p>Username: {{ user.username }}</p>
-<<<<<<< HEAD
-        <a href="{% url 'user_messages' user.pk %}"><button class="auth-buttons">Send a Message</button></a>
-=======
-        <a href="{% url 'user' user.pk %}"><button class="auth-buttons">Send a Message</button></a>
+
         {% if not is_subscribed %}
         <form action="{% url 'users:subscribe' user.id %}" method="post">
             {% csrf_token %}
-            <button type="submit">Subscribe</button>
+            <button type="submit" class="subscription-button">Subscribe</button>
         </form>
         {% else %}
         <form action="{% url 'users:unsubscribe' user.id %}" method="post">
             {% csrf_token %}
-            <button type="submit">Unsubscribe</button>
+            <button type="submit" class="subscription-button">Unsubscribe</button>
         </form>
         {% endif %}
     </div>
@@ -170,7 +180,6 @@
             <li>{{ subscriber.subscriber.username }}</li>
             {% endfor %}
         </ul>
->>>>>>> 4d2d9dda974b54333cf935bcdfc117861846d930
     </div>
 {% endif %}
 {% endblock %}

@@ -53,7 +53,6 @@ class UserMessage(models.Model):
     def __str__(self):
         return f"{self.text} | {self.sender} -> {self.receiver}"
 
-<<<<<<< HEAD
     def user_auth(self, user):
         return self.sender == user
 
@@ -64,7 +63,6 @@ class UserMessage(models.Model):
 
 
 
-=======
 # from django.db import models
 # from django.conf import settings
 #
@@ -76,7 +74,6 @@ class UserMessage(models.Model):
 #
 #     def __str__(self):
 #         return f'Notification for {self.user.username} at {self.timestamp}'
->>>>>>> 4d2d9dda974b54333cf935bcdfc117861846d930
 
 from django.db import models
 from django.conf import settings

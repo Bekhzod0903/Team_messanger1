@@ -113,6 +113,10 @@ class ProfileView(View):
 
 
 
+from django.shortcuts import render, redirect
+from django.views import View
+from .forms import ProfileUpdateForm
+
 class ProfileUpdateView(View):
     def get(self, request):
         update_form = ProfileUpdateForm(instance=request.user)
@@ -125,7 +129,7 @@ class ProfileUpdateView(View):
         update_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user)
         if update_form.is_valid():
             update_form.save()
-            messages.success(request, 'Profile updated successfully')
+            # Redirect to profile page or another appropriate view upon successful update
             return redirect('users:profile', username=request.user.username)
         else:
             context = {

@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About</title>
+    <title>About Us</title>
     <style>
+        /* CSS kodlari shu yerga yoziladi */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -63,11 +64,10 @@
             bottom: 0;
         }
 
-        /* Styling for the button-like link */
         .button-link {
             display: inline-block;
             padding: 10px 20px;
-            background-color: #000; /* Black background color */
+            background-color: #000;
             color: #fff;
             text-decoration: none;
             border-radius: 5px;
@@ -75,10 +75,9 @@
         }
 
         .button-link:hover {
-            background-color: #333; /* Darker shade of black on hover */
+            background-color: #333;
         }
 
-        /* Additional styles for clarity and alignment */
         .about-section {
             text-align: center;
             margin-top: 20px;
@@ -88,8 +87,23 @@
             margin-bottom: 10px;
         }
 
-        .about-section p {
-            margin: 0;
+        .about-section ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .about-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .about-section a {
+            color: #000;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .about-section a:hover {
+            color: #333;
         }
     </style>
 </head>
@@ -100,7 +114,8 @@
     <main>
         <section class="about">
             <h2>Our Mission</h2>
-            <p>Our mission is to provide exceptional service and create lasting relationships with our customers. We strive to achieve excellence in everything we do and to be the best in our industry.</p>
+            <p>Bizning vazifamiz - ajoyib xizmat ko'rsatish va mijozlarimiz bilan doimiy aloqalar o'rnatish. Biz qilayotgan hamma narsada mukammallikka erishishga va sohamizda eng yaxshi bo'lishga intilamiz.</p>
+        <section class="team">
         </section>
         <section class="team">
             <h2>Our Team</h2>
@@ -124,12 +139,15 @@
     </main>
 
     <section class="about-section">
-        <h2>Github link</h2>
-        <p><a href="https://github.com/Bekhzod0903/Team_messanger1">https://github.com/Bekhzod0903/Team_messanger1</a></p>
+        <h2>Links</h2>
+        <ul>
+            <li><a href="https://github.com/Bekhzod0903/Team_messanger1" target="_blank">GitHub Repository: Team Messenger</a></li>
+            <li><a href="https://t.me/muammo_tekshiruvchi_bot" target="_blank">Telegram Bot: Yordam uchun</a></li>
+        </ul>
     </section>
 
     <div style="text-align: center; margin-top: 20px;">
-        <a href="{% url 'home' %}" class="button-link">Home</a>
+        <a href="{% url 'home' %}" class="button-link">Home</a> <!-- Bu yerda "Home" tugmasi manzilga yo'naltirilgan -->
     </div>
 
     <footer>
